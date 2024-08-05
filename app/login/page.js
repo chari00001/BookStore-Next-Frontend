@@ -69,7 +69,7 @@ const LoginForm = () => {
               required
               value={eposta}
               onChange={(e) => setEposta(e.target.value)}
-              className="w-full px-3 py-2 mt-1 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="w-full px-3 py-2 mt-1 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#6600ff] focus:border-[#6600ff] sm:text-sm"
             />
           </div>
           <div>
@@ -93,7 +93,7 @@ const LoginForm = () => {
           <div className="space-y-4">
             <button
               type="submit"
-              className="w-full px-4 py-2 font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 font-medium text-white bg-[#6600ff] rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Login
             </button>

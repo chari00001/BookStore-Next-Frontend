@@ -3,7 +3,6 @@ import api from "../api";
 const login = async (credentials) => {
   try {
     const response = await api.post("/login", credentials);
-    console.log(response);
     return response;
   } catch (error) {
     console.log(error);
