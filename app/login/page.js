@@ -21,7 +21,6 @@ const LoginForm = () => {
 
     try {
       const response = await login(credentials);
-      console.log(response);
       if (response.status === 200) {
         Swal.fire({
           icon: "success",
@@ -29,6 +28,7 @@ const LoginForm = () => {
           showConfirmButton: false,
           timer: 1500,
         }).then(() => {
+          localStorage.setItem("musteriID", response.data.MusteriID);
           router.push("/");
         });
       } else {

@@ -42,12 +42,10 @@ const BookComments = ({ kitapID }) => {
   const handleNewComment = () => {
     if (newComment.trim()) {
       const newCommentObject = {
-        id: comments.length + 1,
-        user: "CurrentUser",
+        MusteriID,
         content: newComment,
         date: new Date().toISOString(),
-        replies: [],
-        count: 0,
+        ParentID: 0,
       };
 
       setComments([newCommentObject, ...comments]);

@@ -1,62 +1,33 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { getCartItems } from "@/network/lib/Sepetler";
+import React from "react";
+import { deleteCartItem, updateCartItem } from "@/network/lib/Sepetler";
 
-const CartItems = () => {
-  const [cartItems, setCartItems] = useState([]);
-
-  useEffect(() => {
-    // Fetch cart items from an API or local storage
-    // For demonstration purposes, we'll use dummy data
-    const fetchCartItems = async () => {
-      const items = [
-        {
-          id: 1,
-          name: "Book Title 1",
-          price: 19.99,
-          quantity: 1,
-          image: "https://via.placeholder.com/150",
-        },
-        {
-          id: 2,
-          name: "Book Title 2",
-          price: 29.99,
-          quantity: 2,
-          image: "https://via.placeholder.com/150",
-        },
-        {
-          id: 3,
-          name: "Book Title 3",
-          price: 14.99,
-          quantity: 1,
-          image: "https://via.placeholder.com/150",
-        },
-        // Add more items as needed
-      ];
-      setCartItems(items);
-    };
-
-    fetchCartItems();
-  }, []);
-
-  const handleRemoveItem = (itemId) => {
-    setCartItems(cartItems.filter((item) => item.id !== itemId));
+const CartItems = ({ cartItems, setCartItems }) => {
+  const handleRemoveItem = async (itemId) => {
+    try {
+      await deleteCartItem(itemId);
+      setCartItems(cartItems.filter((item) => item.SepetID !== itemId));
+    } catch (error) {
+      console.error("Failed to delete item:", error);
+    }
   };
 
-  const handleQuantityChange = (itemId, quantity) => {
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === itemId ? { ...item, quantity: quantity } : item
-      )
-    );
+  const handleQuantityChange = async (itemId, quantity) => {
+    try {
+      await updateCartItem(itemId, { Adet: quantity });
+      setCartItems(
+        cartItems.map((item) =>
+          item.SepetID === itemId ? { ...item, Adet: quantity } : item
+        )
+      );
+    } catch (error) {
+      console.error("Failed to update item quantity:", error);
+    }
   };
 
-  const calculateTotal = () => { 
-    return cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
+  const calculateTotal = () => {
+    return cartItems.reduce((total, item) => total + item.Fiyat * item.Adet, 0);
   };
 
   return (
@@ -69,37 +40,43 @@ const CartItems = () => {
           <div className="grid grid-cols-1 gap-6">
             {cartItems.map((item) => (
               <div
-                key={item.id}
+                key={item.SepetID}
                 className="flex items-center p-4 bg-white rounded-lg shadow-md"
               >
                 <img
-                  src={item.image}
-                  alt={item.name}
+                  src={item.image || "https://via.placeholder.com/100x100"}
+                  alt={item.Baslik}
                   className="w-24 h-24 object-cover rounded-md mr-4"
                 />
                 <div className="flex-grow">
-                  <h2 className="text-xl font-semibold">{item.name}</h2>
+                  <h2 className="text-xl font-semibold">{item.Baslik}</h2>
                   <p className="text-gray-600">
-                    Price: ${item.price.toFixed(2)}
+                    Price: ${item.Fiyat.toFixed(2)}
                   </p>
                   <div className="flex items-center mt-2">
-                    <label htmlFor={`quantity-${item.id}`} className="mr-2">
+                    <label
+                      htmlFor={`quantity-${item.SepetID}`}
+                      className="mr-2"
+                    >
                       Quantity:
                     </label>
                     <input
-                      id={`quantity-${item.id}`}
+                      id={`quantity-${item.SepetID}`}
                       type="number"
                       min="1"
-                      value={item.quantity}
+                      value={item.Adet}
                       onChange={(e) =>
-                        handleQuantityChange(item.id, parseInt(e.target.value))
+                        handleQuantityChange(
+                          item.SepetID,
+                          parseInt(e.target.value)
+                        )
                       }
                       className="w-16 p-2 border rounded-md"
                     />
                   </div>
                 </div>
                 <button
-                  onClick={() => handleRemoveItem(item.id)}
+                  onClick={() => handleRemoveItem(item.SepetID)}
                   className="ml-4 text-red-600 hover:underline"
                 >
                   Remove

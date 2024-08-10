@@ -1,18 +1,31 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CartItems from "@/components/CartItems/CartItems";
 import {
   getCartItemsByUserId,
   deleteCartItem,
   updateCartItem,
 } from "@/network/lib/Sepetler";
-import { useEffect } from "react";
 
 const page = () => {
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    getCartItemsByUserId(localStorage.getItem("musteriID"))
+      .then((res) => {
+        console.log(res.data);
+
+        setCartItems(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
   return (
     <div>
-      <CartItems />
+      <CartItems cartItems={cartItems} setCartItems={setCartItems} />
     </div>
   );
 };

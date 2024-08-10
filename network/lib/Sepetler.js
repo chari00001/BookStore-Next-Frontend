@@ -2,7 +2,16 @@ import api from "../api";
 
 const getCartItemsByUserId = async (userId) => {
   try {
-    const response = await api.get(`/sepetler/${userId}`);
+    const response = await api.get(`/sepetler/musteri/${userId}`);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const createCartItem = async (cartItem) => {
+  try {
+    const response = await api.post("/sepetler", cartItem);
     return response;
   } catch (error) {
     console.log(error);
@@ -20,7 +29,7 @@ const deleteCartItem = async (itemId) => {
 
 const updateCartItem = async (itemId, quantity) => {
   try {
-    const response = await api.patch(`/sepetler/${itemId}`, quantity);
+    const response = await api.put(`/sepetler/${itemId}`, quantity);
     return response;
   } catch (error) {
     console.log(error);
@@ -29,6 +38,7 @@ const updateCartItem = async (itemId, quantity) => {
 
 module.exports = {
   getCartItemsByUserId,
+  createCartItem,
   deleteCartItem,
   updateCartItem,
 };

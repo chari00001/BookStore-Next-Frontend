@@ -1,6 +1,6 @@
 import React from "react";
 
-const BookDetail = ({ book, author, category, publisher }) => {
+const BookDetail = ({ book, author, category, publisher, handleAddToCart }) => {
   return (
     <div className="max-w-[1080px] mx-auto p-4">
       <div className="bg-white overflow-hidden">
@@ -47,7 +47,7 @@ const BookDetail = ({ book, author, category, publisher }) => {
             </p>
             {/* Action Buttons */}
             <div className="flex space-x-4">
-              <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200">
+              <button onClick={handleAddToCart} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200">
                 Add to Cart
               </button>
               <button className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-200">

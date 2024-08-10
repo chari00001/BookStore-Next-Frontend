@@ -19,6 +19,8 @@ const page = () => {
   const count = useSelector((state) => state.example.value);
   const dispatch = useDispatch();
 
+  console.log(localStorage.getItem("musteriID"));
+
   return (
     <div className="flex flex-col items-center w-full">
       <p>{count}</p>

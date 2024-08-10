@@ -6,16 +6,18 @@ import { getAuthorById } from "@/network/lib/Yazarlar";
 import { getCategoryById } from "@/network/lib/Kategoriler";
 import { getPublisherById } from "@/network/lib/Yayinevleri";
 import { useRouter, useSearchParams } from "next/navigation";
+import { createCartItem } from "@/network/lib/Sepetler";
 import BookDetail from "@/components/BookDetail/BookDetail";
 import BookComments from "@/components/BookComments/BookComments";
+import Swal from "sweetalert2";
 
 const page = () => {
-  const id = useSearchParams().get("id");
-
   const [book, setBook] = useState({});
   const [author, setAuthor] = useState({});
   const [category, setCategory] = useState({});
   const [publisher, setPublisher] = useState({});
+
+  const id = useSearchParams().get("id");
 
   useEffect(() => {
     getBookById(id)
@@ -57,6 +59,27 @@ const page = () => {
     }
   }, [book]);
 
+  const handleAddToCart = () => {
+    const cartItem = {
+      MusteriID: parseInt(localStorage.getItem("musteriID")),
+      KitapID: parseInt(id),
+      Adet: 1,
+    };
+
+    createCartItem(cartItem)
+      .then((res) => {
+        console.log(res);
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Item added to cart",
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   return (
     <div>
       <BookDetail
@@ -64,6 +87,7 @@ const page = () => {
         author={author}
         category={category}
         publisher={publisher}
+        handleAddToCart={handleAddToCart}
       />
       <BookComments kitapID={id} />
     </div>

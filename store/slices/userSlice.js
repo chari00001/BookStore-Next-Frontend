@@ -1,21 +1,25 @@
-// store/slices/userSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 
+// store/slices/userSlice.js
+
 export const userSlice = createSlice({
-  name: "example",
+  name: "user",
   initialState: {
-    value: 0,
+    loggedIn: false,
+    userData: null,
   },
   reducers: {
-    increment: (state) => {
-      state.value += 1;
+    login: (state, action) => {
+      state.loggedIn = true;
+      state.userData = action.payload;
     },
-    decrement: (state) => {
-      state.value -= 1;
+    logout: (state) => {
+      state.loggedIn = false;
+      state.userData = null;
     },
   },
 });
 
-export const { increment, decrement } = userSlice.actions;
+export const { login, logout } = userSlice.actions;
 
 export default userSlice.reducer;
