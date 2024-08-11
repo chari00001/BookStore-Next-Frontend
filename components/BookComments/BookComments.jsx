@@ -1,4 +1,10 @@
 import React, { useState, useEffect } from "react";
+import {
+  getCommentsByBookId,
+  postComment,
+  deleteComment,
+  getRepliesByCommentID,
+} from "@/network/lib/Yorumlar";
 
 const BookComments = ({ kitapID }) => {
   const [comments, setComments] = useState([]);
@@ -7,48 +13,34 @@ const BookComments = ({ kitapID }) => {
 
   useEffect(() => {
     const fetchComments = async () => {
-      const fetchedComments = [
-        {
-          id: 1,
-          user: "User1",
-          content: "This is a comment",
-          date: "2024-08-01T12:00:00Z",
-          replies: [],
-          count: 10,
-        },
-        {
-          id: 2,
-          user: "User2",
-          content: "This is another comment",
-          date: "2024-08-02T14:30:00Z",
-          replies: [
-            {
-              id: 3,
-              user: "User3",
-              content: "This is a reply",
-              date: "2024-08-02T15:00:00Z",
-            },
-          ],
-          count: 5,
-        },
-      ];
+      const fetchedComments = await getCommentsByBookId(kitapID);
 
-      setComments(fetchedComments);
+      if (fetchComments) {
+        for (let comment of fetchedComments.data) {
+          const replies = await getRepliesByCommentID(comment.KitapID);
+          comment.replies = replies;
+        }
+      }
+
+      setComments(fetchedComments.data);
     };
 
     fetchComments();
-  }, []);
+  }, [kitapID]);
 
-  const handleNewComment = () => {
+  const handleNewComment = async () => {
     if (newComment.trim()) {
       const newCommentObject = {
-        MusteriID,
-        content: newComment,
-        date: new Date().toISOString(),
+        MusteriID: localStorage.getItem("musteriID"),
+        KitapID: kitapID,
         ParentID: 0,
+        Tarih: new Date().toISOString(),
+        Yorum: newComment,
       };
 
-      setComments([newCommentObject, ...comments]);
+      const createdComment = await postComment(newCommentObject);
+
+      setComments([createdComment, ...comments]);
       setNewComment("");
     }
   };
@@ -100,9 +92,9 @@ const BookComments = ({ kitapID }) => {
       </div>
 
       <div>
-        {comments.map((comment) => (
+        {comments?.map((comment) => (
           <div
-            key={comment.id}
+            key={comment.YorumID}
             className="mb-6 p-4 border border-gray-300 rounded-lg shadow-md"
           >
             <div className="flex items-start mb-4">
@@ -112,14 +104,14 @@ const BookComments = ({ kitapID }) => {
                 className="w-10 h-10 rounded-full mr-4"
               />
               <div>
-                <div className="text-sm font-semibold">{comment.user}</div>
+                <div className="text-sm font-semibold">{comment.MusteriID}</div>
                 <div className="text-xs text-gray-500">
-                  {new Date(comment.date).toLocaleString()}
+                  {new Date(comment.Tarih).toLocaleString()}
                 </div>
               </div>
             </div>
-            <p className="ml-14 mb-2 text-gray-800">{comment.content}</p>
-            {comment.replies.length > 0 && (
+            <p className="ml-14 mb-2 text-gray-800">{comment.Yorum}</p>
+            {/* {comment.replies?.length > 0 && (
               <div className="ml-14 mt-4 border-l-2 border-gray-200 pl-4">
                 {comment.replies.map((reply) => (
                   <div
@@ -145,7 +137,7 @@ const BookComments = ({ kitapID }) => {
                   </div>
                 ))}
               </div>
-            )}
+            )} */}
           </div>
         ))}
       </div>

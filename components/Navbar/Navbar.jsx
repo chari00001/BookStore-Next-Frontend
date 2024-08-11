@@ -47,9 +47,19 @@ const Navbar = () => {
         </li>
       </ul>
       <div className="flex space-x-4">
-        <Link href="/login">
-          <p className="hover:text-gray-800 text-[#6600ff] font-bold">Login</p>
-        </Link>
+        {localStorage.getItem("musteriID") ? (
+          <Link href="/profil">
+            <p className="hover:text-gray-800 text-[#6600ff] font-bold">
+              Profil
+            </p>
+          </Link>
+        ) : (
+          <Link href="/login">
+            <p className="hover:text-gray-800 text-[#6600ff] font-bold">
+              Login
+            </p>
+          </Link>
+        )}
         <Link href="/sepet">
           <div className="relative hover:text-gray-800 text-[#6600ff] font-bold">
             <p>Cart (0)</p>

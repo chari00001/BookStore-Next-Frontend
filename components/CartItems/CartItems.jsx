@@ -3,7 +3,7 @@
 import React from "react";
 import { deleteCartItem, updateCartItem } from "@/network/lib/Sepetler";
 
-const CartItems = ({ cartItems, setCartItems }) => {
+const CartItems = ({ cartItems, setCartItems, handleProceed }) => {
   const handleRemoveItem = async (itemId) => {
     try {
       await deleteCartItem(itemId);
@@ -88,7 +88,12 @@ const CartItems = ({ cartItems, setCartItems }) => {
             <h2 className="text-2xl font-bold">
               Total: ${calculateTotal().toFixed(2)}
             </h2>
-            <button className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            <button
+              onClick={() => {
+                handleProceed("checkout");
+              }}
+              className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
               Proceed to Checkout
             </button>
           </div>

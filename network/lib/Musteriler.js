@@ -18,7 +18,17 @@ const register = async (credentials) => {
   }
 };
 
+const getMusteri = async (id) => {
+  try {
+    const response = await api.get(`/musteriler/${id}`);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   login,
   register,
+  getMusteri,
 };
